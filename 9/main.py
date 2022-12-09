@@ -1,4 +1,5 @@
 from math import copysign
+from time import perf_counter
 
 def get_data():
     with open('input.txt') as f:
@@ -7,7 +8,7 @@ def get_data():
 def parse_move(item):
     direction, amount = item.split(' ')
     amount = int(amount)
-    moves = [get_change(direction) for x in range(amount)]
+    moves = [get_change(direction)]*amount
     return moves
 
 def get_change(direction):
@@ -35,6 +36,7 @@ def diff_positions(pos1, pos2):
 def determine_move(diff):
     return tuple(x if x == 0 else int(copysign(1, x)) for x in diff)
 
+start_time = perf_counter()
 data = get_data()
 knots = [(0, 0) for x in range(10)]
 all_tail_positions = []
@@ -51,11 +53,8 @@ for idx, move in enumerate(move_set):
         
         is_adjacent = max(tuple(map(lambda x: abs(x), diff))) <= 1
         if not is_adjacent:
-            print(f'\n-----move {idx + 1}, knot {knot_index}------\ndiff', diff)
-            print('moving', lead, follow)
             move = determine_move(diff)
-            print(move)
             knots[knot_index] = add_positions(follow, move)
-            print('moved', lead, knots[knot_index])
         all_tail_positions.append(knots[-1])
-print('\n\nanswer:', len(set(all_tail_positions)))
+stop_time = perf_counter()
+print('\n\nanswer:', len(set(all_tail_positions)), '\ntime:', stop_time - start_time)
