@@ -1,7 +1,7 @@
 from math import copysign
 
 def get_data():
-    with open('example.txt') as f:
+    with open('input.txt') as f:
         return [item.replace('\n', '') for item in f.readlines()]
 
 def parse_move(item):
